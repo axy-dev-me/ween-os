@@ -1,0 +1,23 @@
+gdt_start:
+    dd 0x00000000
+    dd 0x00000000
+
+    dw 0xffff
+    dw 0x0000
+    db 0x00
+    db 0x9a
+    db 0xcf
+    db 0x00
+
+    dw 0xffff
+    dw 0x0000
+    db 0x00
+    db 0x92
+    db 0xcf
+    db 0x00
+
+gdt_end:
+
+gdt_pointer:
+    dw gdt_end - gdt_start - 1
+    dd gdt_start
