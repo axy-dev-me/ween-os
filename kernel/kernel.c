@@ -16,7 +16,7 @@ __attribute__((section(".text.entry")))
 void kernel() {
     clear_screen();
 
-    print_ro_string("Welcome to Ween-OS!\n", 0x0f);
+    print_ro_string("Welcome to Ween-OS!\nWrite \"help\" to view all available commands\n\n", 0x0f);
     print_ro_string("[root@weenos]> ", 0x0f);
 
     beep(1000, 1000);
@@ -40,8 +40,12 @@ void kernel() {
             print_ro_char('\n', 0x0F);
 
             if (str_equals(cmd, "cls")) clear_screen();
-            if (str_equals(cmd, "reboot")) sys_reboot();
-            if (str_equals(cmd, "shutdown")) qemu_shutdown();
+            else if (str_equals(cmd, "reboot")) sys_reboot();
+            else if (str_equals(cmd, "shutdown")) qemu_shutdown();
+            else if (str_equals(cmd, "help")) {
+                print_ro_string("\ncls - clear screen\n\nreboot - reboot system\n\nshutdown - shutdown system\n\n", 0x0f);
+            }
+            else { print_ro_string("Unknown command!\n", 0x0c); }
 
             print_ro_string("[root@weenos]> ", 0x0f);
             char cmd[80]; cmd_len = 0;
