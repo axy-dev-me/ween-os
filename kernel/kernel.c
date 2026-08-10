@@ -1,6 +1,7 @@
 #include "hal.h"
 #include "vga.h"
 #include "speaker.h"
+#include "power.h"
 
 __attribute__((section(".text.entry")))
 void kernel() {
@@ -12,6 +13,8 @@ void kernel() {
     beep(1000, 1000);
     beep(2000, 1000);
     beep(1500, 1000);
+
+    qemu_shutdown();
 
     while(1) { __asm__("hlt"); }
 }
