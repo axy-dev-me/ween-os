@@ -14,40 +14,43 @@ int int_len(int num) {
     return len;
 }
 
+void print_char(char chr, int color) {
+    if (chr == '\n') {
+        cursor = ((cursor / 80) + 1) * 80;
+    } else {
+        video_memory[cursor] = chr | (color << 8);
+        cursor++;
+    }
+}
+
 void print_string(char* text, int color) {
     for (short i = 0; text[i] != '\0'; i++) {
-        if (text[i] == '\n') { 
-            cursor = ((cursor / 80) + 1) * 80;
-        } else { 
-            video_memory[cursor] = text[i] | (color << 8); 
-            cursor++; 
-        }
+        print_char(text[i], color);
     }
 }
 
 void print_int(int num, int color) {
     if (num == 0) { 
-        print_string("0", color); 
+        print_char('0', color); 
         return; 
     }
     if (num < 0) {
-        print_string("-", color);
+        print_char('-', color);
         num = -num;
     }
 
     int len = int_len(num);
-
-    cursor += len;
+    int target_pos = cursor + len - 1;
 
     while (num > 0) {
-        video_memory[cursor - 1] = ((num % 10) + '0') | (color << 8);
-        
-        cursor--;
+        video_memory[target_pos] = ((num % 10) + '0') | (color << 8);
+        target_pos--;
         num /= 10;
     }
 
     cursor += len;
 }
+
 
 void clear_screen() {
     for (int i = 0; i < 4000; i++) {
