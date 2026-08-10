@@ -1,4 +1,4 @@
-# 🚀 MyOS (Replace with your OS Name)
+# 🚀 WeenOS
 
 A simple, lightweight 32-bit x86 hobby operating system kernel written in C and Assembly. This project is built for educational purposes to explore low-level software development, VGA video memory management, bare-metal programming, and hardware interfacing.
 
