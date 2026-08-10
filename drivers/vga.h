@@ -55,7 +55,7 @@ static inline void print_int(int num, int color) {
 
 static inline void clear_screen(void) {
     for (int i = 0; i < 4000; i++) {
-        video_memory[i] = (unsigned short)0x0720;
+        video_memory[i] = (unsigned short)0x0000;
     }
 }
 
