@@ -1,3 +1,5 @@
+#include "hal.h"
+
 volatile unsigned short* video_memory = (volatile unsigned short*) 0xB8000;
 unsigned short cursor = 0;
 
@@ -34,7 +36,6 @@ void print_int(int num, int color) {
     }
 
     int len = int_len(num);
-
 
     cursor += len;
 
