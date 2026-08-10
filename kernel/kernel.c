@@ -37,18 +37,18 @@ void kernel() {
         } 
         else if (letter == '\n') {
             cmd[cmd_len] = '\0';
-            print_ro_char('\n', 0x0F);
+            print_char('\n', 0x0F);
 
             if (str_equals(cmd, "cls")) clear_screen();
             else if (str_equals(cmd, "reboot")) sys_reboot();
             else if (str_equals(cmd, "shutdown")) qemu_shutdown();
             else if (str_equals(cmd, "help")) {
-                print_ro_string("\ncls - clear screen\n\nreboot - reboot system\n\nshutdown - shutdown system\n\n", 0x0f);
+                print_string("\ncls - clear screen\n\nreboot - reboot system\n\nshutdown - shutdown system\n\n", 0x0f);
             }
-            else { print_ro_string("Unknown command!\n", 0x0c); }
+            else { print_string("Unknown command!\n", 0x0c); }
 
             print_ro_string("[root@weenos]> ", 0x0f);
-            char cmd[80]; cmd_len = 0;
+            cmd_len = 0;
         }
     }
 }
