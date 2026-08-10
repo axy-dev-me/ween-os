@@ -1,6 +1,8 @@
 #ifndef VGA_H
 #define VGA_H
 
+#include "logic.h"
+
 static volatile unsigned short* video_memory = (volatile unsigned short*) 0xB8000;
 static unsigned short cursor = 0;
 static unsigned short max_cursor = 0;
@@ -12,17 +14,6 @@ static inline void reset_cursor() {
 static inline void erase_last_simb() {
     cursor--;
     video_memory[cursor] = 0x0720;
-}
-
-static inline int int_len(int num) {
-    if (num == 0) return 1;
-    if (num < 0) num = -num;
-    short len = 0;
-    while (num > 0) {
-        len++;
-        num /= 10;
-    }
-    return len;
 }
 
 static inline void print_char(char chr, int color) {
