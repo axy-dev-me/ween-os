@@ -73,8 +73,8 @@ loadkern db 'Loading kernel... ', 0
 done db 'Done! ', 0x0d, 0x0a, 0
 diskerr db 0x0d, 0x0a, 'Disk Error!', 0
 
-%include "bootloader/libs/print16.s"
-%include "bootloader/libs/gdt.s"
+%include "boot/libs/print16.s"
+%include "boot/libs/gdt.s"
 
 times 510-($-$$) db 0
 dw 0xaa55
