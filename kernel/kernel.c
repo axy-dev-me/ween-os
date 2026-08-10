@@ -2,19 +2,49 @@
 #include "vga.h"
 #include "speaker.h"
 #include "power.h"
+#include "keyboard.h"
+
+static inline int str_equals(char* str1, char* str2) {
+    int i = 0;
+    while (str1[i] != '\0' || str2[i] != '\0') {
+        if (str1[i] != str2[i]) return 0; i++;
+    }
+    return 1;
+}
 
 __attribute__((section(".text.entry")))
 void kernel() {
     clear_screen();
 
-    print_string("Hello, World!\nHello\n", 0x0f);
-    print_int(2026, 0x0f);
+    print_ro_string("Welcome to Ween-OS!\n", 0x0f);
+    print_ro_string("[root@weenos]> ", 0x0f);
 
     beep(1000, 1000);
     beep(2000, 1000);
     beep(1500, 1000);
 
-    qemu_shutdown();
+    char cmd[80];
+    short cmd_len = 0;
+    while(1) {
+        char letter = get_char_blocked();
+        
+        if (letter != 0 && letter != '\n' && letter != '\b') {
+            print_char(letter, 0x0F);
+            cmd[cmd_len] = letter; cmd_len++;
+        } 
+        else if (letter == '\b' && cmd_len > 0) {
+            cmd_len--; erase_last_simb();
+        } 
+        else if (letter == '\n') {
+            cmd[cmd_len] = '\0';
+            print_ro_char('\n', 0x0F);
 
-    while(1) { __asm__("hlt"); }
+            if (str_equals(cmd, "cls")) clear_screen();
+            if (str_equals(cmd, "reboot")) sys_reboot();
+            if (str_equals(cmd, "shutdown")) qemu_shutdown();
+
+            print_ro_string("[root@weenos]> ", 0x0f);
+            char cmd[80]; cmd_len = 0;
+        }
+    }
 }
