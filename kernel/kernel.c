@@ -3,19 +3,26 @@ unsigned short cursor = 0;
 
 void print_string(char* text, int color) {
     for (short i = 0; text[i] != '\0'; i++) {
-        video_memory[cursor] = text[i] | (color << 8);
-        cursor++;
+        if (text[i] == '\n') { 
+            cursor = ((cursor / 80) + 1) * 80;
+        } else { 
+            video_memory[cursor] = text[i] | (color << 8); 
+            cursor++; 
+        }
+    }
+}
+
+void clear_screen() {
+    for (int i = 0; i < 4000; i++) {
+        video_memory[i] = (unsigned short)0x0720;
     }
 }
 
 __attribute__((section(".text.entry")))
 void kernel() {
-    unsigned short blank = 0x0720; 
-    for (int i = 0; i < 4000; i++) {
-        video_memory[i] = blank;
-    }
+    clear_screen();
 
-    print_string("Hello, World!", 0x0f);
+    print_string("Hello, World!\nHello", 0x0f);
 
     while(1) { __asm__("hlt"); }
 }
