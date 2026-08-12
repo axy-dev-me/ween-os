@@ -17,4 +17,10 @@ __sil_uint8_t inb(uint16_t port) {
     return result;
 }
 
+__sil_uint16_t inw(uint16_t port) {
+    uint16_t result;
+    __asm__ volatile("inw %1, %0" : "=a"(result) : "Nd"(port));
+    return result;
+}
+
 #endif
