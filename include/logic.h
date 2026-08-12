@@ -1,23 +1,22 @@
 #ifndef LOGIC_H
 #define LOGIC_H
 
-static inline int str_equals(char* str1, char* str2) {
-    int i = 0;
-    while (str1[i] != '\0' || str2[i] != '\0') {
-        if (str1[i] != str2[i]) return 0; i++;
-    }
-    return 1;
-}
+#include "types.h"
 
-static inline int int_len(int num) {
+__sil_uint8_t int_len(int num) {
     if (num == 0) return 1;
     if (num < 0) num = -num;
-    short len = 0;
-    while (num > 0) {
-        len++;
-        num /= 10;
-    }
-    return len;
+    uint8_t l = 0;
+    for (; num > 0; num /= 10, l++);
+    return l;
+}
+
+__sil_size_t string_len(const char* str) { for (size_t i = 0;; i++) if (str[i] == '\0') return i; }
+
+__sil_uint8_t str_equals(const char* str1, const char* str2) {
+    size_t i = 0;
+    while (str1[i] == str2[i] && str1[i] != '\0') i++;
+    return str1[i] == str2[i];
 }
 
 #endif

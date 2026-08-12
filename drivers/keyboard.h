@@ -2,6 +2,7 @@
 #define KEYBOARD_H
 
 #include "hal.h"
+#include "types.h"
 
 static const char kbd_map[] = {
     0,  0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 
@@ -20,18 +21,14 @@ static const char kbd_map[] = {
 };
 
 
-static inline char get_char_blocked() {
+__sil_char get_char_blocked() {
     while ((inb(0x64) & 1) == 0);
 
     uint8_t scancode = inb(0x60);
 
-    if (scancode & 0x80) {
-        return 0;
-    }
+    if (scancode & 0x80) return 0;
 
-    if (scancode < sizeof(kbd_map)) {
-        return kbd_map[scancode];
-    }
+    if (scancode < sizeof(kbd_map)) return kbd_map[scancode];
 
     return 0;
 }

@@ -2,6 +2,15 @@ org 0x7c00
 bits 16
 
 start:
+    xor ax, ax
+    mov ds, ax
+    mov es, ax
+    mov ss, ax
+    mov sp, 0x7c00
+
+    mov [boot_drive], dl
+
+
     mov ax, 0x0003
     int 0x10
 
@@ -11,11 +20,11 @@ start:
     call print16
 
     mov ah, 0x02
-    mov al, 8
+    mov al, 7
     mov ch, 0
     mov cl, 2
     mov dh, 0
-    mov dl, 0x80
+    mov dl, [boot_drive]
     mov bx, 0x1000
     mov es, bx
     mov bx, 0x0000
@@ -43,15 +52,6 @@ start:
 
 
 
-disk_error:
-    mov si, diskerr
-    call print16
-    cli
-    hlt
-    jmp $
-
-
-
 bits 32
 init_pm:
     mov ax, 0x10
@@ -66,12 +66,20 @@ init_pm:
 
     jmp 0x10000
 
-
+bits 16
+disk_error:
+    mov si, diskerr
+    call print16
+.loop:
+    cli
+    hlt
+    jmp $
 
 diskread db 'Reading Disk... ', 0
 loadkern db 'Loading kernel... ', 0
 done db 'Done! ', 0x0d, 0x0a, 0
 diskerr db 0x0d, 0x0a, 'Disk Error!', 0
+boot_drive db 0
 
 %include "boot/libs/print16.s"
 %include "boot/libs/gdt.s"

@@ -2,28 +2,24 @@
 #define SPEAKER_H
 
 #include "hal.h"
+#include "types.h"
 
-static inline void play_sound(unsigned int frequency) {
+__sil_void play_sound(uint32_t frequency) {
     if (frequency == 0) return;
 
-    unsigned int div = 1193182 / frequency;
+    uint32_t div = 1193182 / frequency;
 
     outb(0x43, 0xB6);
-    outb(0x42, (unsigned char) (div & 0xFF));
-    outb(0x42, (unsigned char) ((div >> 8) & 0xFF));
+    outb(0x42, (uint8_t) (div & 0xFF));
+    outb(0x42, (uint8_t) ((div >> 8) & 0xFF));
 
-    unsigned char tmp = inb(0x61);
-    if (tmp != (tmp | 3)) {
-        outb(0x61, tmp | 3);
-    }
+    uint8_t tmp = inb(0x61);
+    if (tmp != (tmp | 3)) outb(0x61, tmp | 3);
 }
 
-static inline void nosound() {
-    unsigned char tmp = inb(0x61) & 0xFC;
-    outb(0x61, tmp);
-}
+__sil_void nosound() { outb(0x61, inb(0x61) & 0xFC); }
 
-static inline void beep(int hz, int duration) {
+__sil_void beep(int hz, int duration) {
     play_sound(hz);
 
     for (volatile int i = 0; i < duration * 10000; i++); 

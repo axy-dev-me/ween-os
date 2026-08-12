@@ -1,7 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
 
-#include "hal.h"
+#include "types.h"
 
 typedef struct {
     uint8_t second;
@@ -9,7 +9,7 @@ typedef struct {
     uint8_t hour;
     uint8_t day;
     uint8_t month;
-    uint32_t year;
+    uint16_t year;
 } rtc_time_t;
 
 #define CMOS_PORT_REG  0x70
@@ -26,17 +26,17 @@ typedef struct {
 
 #define BCD_TO_BIN(bcd) ((((bcd) & 0xF0) >> 4) * 10 + ((bcd) & 0x0F))
 
-static inline int rtc_is_updating(void) {
+__sil_int rtc_is_updating(void) {
     outb(CMOS_PORT_REG, RTC_REG_STAT_A);
     return (inb(CMOS_PORT_DATA) & 0x80);
 }
 
-static inline uint8_t get_rtc_register(int reg) {
+__sil_uint8_t get_rtc_register(int reg) {
     outb(CMOS_PORT_REG, reg | 0x80);
     return inb(CMOS_PORT_DATA);
 }
 
-static inline void read_rtc(rtc_time_t *time) {
+__sil_void read_rtc(rtc_time_t *time) {
     while (rtc_is_updating());
 
     uint8_t second = get_rtc_register(RTC_REG_SECOND);

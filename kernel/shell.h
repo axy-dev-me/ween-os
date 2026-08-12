@@ -8,8 +8,9 @@
 #include "keyboard.h"
 #include "time.h"
 #include "logic.h"
+#include "types.h"
 
-static inline void shell_loop(rtc_time_t time) {
+__sil_void shell_loop(rtc_time_t time) {
     char cmd[80];
     short cmd_len = 0;
 
@@ -27,7 +28,8 @@ static inline void shell_loop(rtc_time_t time) {
             cmd[cmd_len] = '\0';
             print_char('\n', 0x0F);
 
-            if (str_equals(cmd, "cls")) clear_screen();
+            if (str_equals(cmd, "")) {}
+            else if (str_equals(cmd, "cls")) clear_screen();
             else if (str_equals(cmd, "reboot")) sys_reboot();
             else if (str_equals(cmd, "shutdown")) qemu_shutdown();
             else if (str_equals(cmd, "help")) {
@@ -39,11 +41,11 @@ static inline void shell_loop(rtc_time_t time) {
             }
             else if (str_equals(cmd, "time")) {
                 read_rtc(&time);
-                print_int(time.hour, 0x0f); print_char(':', 0x0f);
-                print_int(time.minute, 0x0f); print_char(':', 0x0f);
-                print_int(time.second, 0x0f); print_char('\n', 0x0f);
+                print_time_unit(time.hour  ); print_char(':', 0x0f);
+                print_time_unit(time.minute); print_char(':', 0x0f);
+                print_time_unit(time.second); print_char('\n', 0x0f);
             }
-            else { print_string("Unknown command!\n", 0x0c); }
+            else { print_string("Unknown command!\n", 0x0c); beep(500, 500); }
 
             print_ro_string("[root@weenos]> ", 0x0f);
             cmd_len = 0;
