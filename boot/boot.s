@@ -24,11 +24,11 @@ boot_drive: db 0
 times 510-($-$$) db 0
 dw 0xaa55
 
-kernel:
-bits 32
-    mov byte [0xb8000], 'K'
-    mov byte [0xb8001], 0x0a
-    hlt
-    jmp $
+; kernel:
+; bits 32
+;     mov byte [0xb8000], 'K'
+;     mov byte [0xb8001], 0x0a
+;     hlt
+;     jmp $
 
-times 512-($-kernel) db 0
+; times 512-($-kernel) db 0

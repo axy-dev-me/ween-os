@@ -16,7 +16,7 @@ init_pm:
     mov fs, ax
     mov gs, ax
 
-    mov ebp, 0x100000 ; stack top
+    mov ebp, 0xa0000 ; stack top
     mov esp, ebp
 
     jmp CODE_SEG:0x8000 ; jmp to kernel    0x0800 (es) * 0x10 + 0 (bx) = 0x8000
