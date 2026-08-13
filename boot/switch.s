@@ -1,4 +1,4 @@
-[bits 16]
+bits 16
 switch_to_pm:
     cli
     lgdt [gdt_descriptor]
@@ -7,7 +7,7 @@ switch_to_pm:
     mov cr0, eax
     jmp CODE_SEG:init_pm
 
-[bits 32]
+bits 32
 init_pm:
     mov ax, DATA_SEG
     mov ds, ax
