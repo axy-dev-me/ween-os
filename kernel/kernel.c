@@ -1,8 +1,10 @@
 #include <stdint.h>
 
+#include "vga.h"
+
 __attribute__((section(".text.entry")))
 void kmain() {
-    int16_t* vga = (int16_t*)0xb8000;
-    vga[0] = 'K' + (0x0f << 8);
+    clean_screen();
+    print_string("Hello, World!", 0x0f);
     while(1) __asm__("hlt");
 }
