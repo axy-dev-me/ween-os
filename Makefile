@@ -16,3 +16,16 @@ run:
 	qemu-system-$(ARCH) tmp/os.img
 
 	rm -rf tmp
+
+build:
+	mkdir -p tmp build
+
+	nasm -fbin boot/boot.s -o tmp/boot.bin
+
+	gcc $(CFLAGS) -c kernel/*.c
+	mv *.o tmp/
+	ld $(LDFLAGS) tmp/*.o -o tmp/kernel.bin
+
+	cat tmp/boot.bin tmp/kernel.bin > build/os.img
+
+	rm -rf tmp
