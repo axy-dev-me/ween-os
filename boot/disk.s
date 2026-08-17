@@ -27,7 +27,7 @@ align 4
 dap:
     db 0x10
     db 0x00
-    dw 1                  ; sectors to read
+    dw 63                  ; sectors to read
 
     ; bx and es
     dw 0x0
